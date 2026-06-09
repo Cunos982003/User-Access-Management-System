@@ -783,11 +783,4 @@ docker-compose up -d postgres redis
 
 ---
 
-## License
-
-This project is developed for educational purposes at [R2S Academy](https://ojt.r2.vn).  
-Feel free to fork and use it as a portfolio project.
-
----
-
 > Built with ❤️ for aspiring Junior Java Backend Developers.
