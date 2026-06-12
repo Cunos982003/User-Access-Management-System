@@ -1,0 +1,49 @@
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**
+!**/src/test/**
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+
+### VS Code ###
+.vscode/
+
+### Mac ###
+.DS_Store
+
+### Logs ###
+*.log
+
+### Temp files ###
+*.tmp
+*.bak
+*.swp
+
+### Docker ###
+.dockerignore
+Dockerfile
+docker-compose*.yml
+
+### Git ###
+.git
+.gitignore
+.gitattributes
+
+### Documentation ###
+*.md
+docs/
+
+### CI/CD ###
+.github/
