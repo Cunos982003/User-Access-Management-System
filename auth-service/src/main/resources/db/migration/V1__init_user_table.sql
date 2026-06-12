@@ -12,7 +12,8 @@ CREATE TABLE users (
     avatar_url    VARCHAR(500),
     status        VARCHAR(20)  NOT NULL DEFAULT 'PENDING',
     created_at    TIMESTAMP NOT NULL DEFAULT NOW(),
-    updated_at    TIMESTAMP NOT NULL DEFAULT NOW()
+    updated_at    TIMESTAMP NOT NULL DEFAULT NOW(),
+    last_login    TIMESTAMP
 );
 
 -- Create index for better query performance
@@ -22,8 +23,9 @@ CREATE INDEX idx_users_status ON users(status);
 
 -- roles table
 CREATE TABLE roles (
-    id   SERIAL PRIMARY KEY,
-    name VARCHAR(50) UNIQUE NOT NULL
+    id          SERIAL PRIMARY KEY,
+    name        VARCHAR(50) UNIQUE NOT NULL,
+    description VARCHAR(200)
 );
 
 -- authorities table (fine-grained permissions)

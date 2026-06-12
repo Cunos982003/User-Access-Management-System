@@ -1,4 +1,4 @@
--- V4__add_audit_table.sql
+-- V1__create_audit_log_table.sql
 -- Create audit logging table
 
 CREATE TABLE IF NOT EXISTS audit_logs (
@@ -17,11 +17,12 @@ CREATE TABLE IF NOT EXISTS audit_logs (
     duration_ms     BIGINT,
     request_method  VARCHAR(10),
     request_path    VARCHAR(500),
-    CONSTRAINT fk_audit_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
+    CONSTRAINT chk_status CHECK (status IN ('SUCCESS', 'FAILURE'))
 );
 
 -- Create indexes for common queries
 CREATE INDEX IF NOT EXISTS idx_audit_user_id ON audit_logs(user_id);
+CREATE INDEX IF NOT EXISTS idx_audit_username ON audit_logs(username);
 CREATE INDEX IF NOT EXISTS idx_audit_action ON audit_logs(action);
 CREATE INDEX IF NOT EXISTS idx_audit_resource ON audit_logs(resource_type);
 CREATE INDEX IF NOT EXISTS idx_audit_timestamp ON audit_logs(timestamp);

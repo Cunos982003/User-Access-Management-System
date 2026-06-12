@@ -2,10 +2,10 @@
 -- Insert default roles and authorities
 
 -- Insert roles
-INSERT INTO roles (name) VALUES
-    ('ROLE_USER'),
-    ('ROLE_MODERATOR'),
-    ('ROLE_ADMIN');
+INSERT INTO roles (name, description) VALUES
+    ('ROLE_USER', 'Standard user with basic permissions'),
+    ('ROLE_MODERATOR', 'Moderator with user management permissions'),
+    ('ROLE_ADMIN', 'Administrator with full system access');
 
 -- Insert authorities
 INSERT INTO authorities (name) VALUES
