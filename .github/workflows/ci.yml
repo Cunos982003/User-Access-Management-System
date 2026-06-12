@@ -53,6 +53,9 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
+      - name: Make Maven wrapper executable
+        run: chmod +x mvnw
+
       - name: Build with Maven
         run: ./mvnw clean install -DskipTests -B
 
@@ -77,6 +80,7 @@ jobs:
       - name: Generate test report
         if: always()
         uses: dorny/test-reporter@v1
+        continue-on-error: true
         with:
           name: Maven Tests
           path: '**/target/surefire-reports/*.xml'
