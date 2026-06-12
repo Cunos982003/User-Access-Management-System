@@ -72,6 +72,10 @@ app:
     length: 6
     expiry-minutes: 5
 
+audit:
+  service:
+    url: http://localhost:8082/api/v1
+
 logging:
   level:
     root: INFO

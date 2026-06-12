@@ -41,6 +41,7 @@ public class AuthService {
     private final UserMapper userMapper;
     private final AuthenticationManager authenticationManager;
     private final JwtProperties jwtProperties;
+    private final AuditLogService auditLogService;
 
     @Transactional
     public UserResponse register(RegisterRequest request) {
@@ -71,6 +72,9 @@ public class AuthService {
         user = userRepository.save(user);
         log.info("User registered successfully: {}", user.getUsername());
 
+        auditLogService.logSuccess("USER_REGISTER", user.getId(), user.getUsername(),
+            "New user registered", null, null);
+
         String otpCode = otpService.generateOtp(user, OtpType.VERIFY_EMAIL);
         emailService.sendOtpEmail(user.getEmail(), otpCode, "email verification");
 
@@ -90,6 +94,9 @@ public class AuthService {
 
         user.setStatus(UserStatus.ACTIVE);
         user = userRepository.save(user);
+
+        auditLogService.logSuccess("EMAIL_VERIFIED", user.getId(), user.getUsername(),
+            "Email verified and account activated", null, null);
 
         emailService.sendWelcomeEmail(user.getEmail(), user.getUsername());
         log.info("User verified successfully: {}", user.getUsername());
@@ -131,6 +138,8 @@ public class AuthService {
             UUID.fromString(request.getDeviceId()) : UUID.randomUUID();
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(user, deviceId);
 
+        auditLogService.logSuccess("USER_LOGIN", user.getId(), user.getUsername(),
+            "User logged in successfully", null, null);
         log.info("User logged in successfully: {}", user.getUsername());
 
         return AuthResponse.builder()
