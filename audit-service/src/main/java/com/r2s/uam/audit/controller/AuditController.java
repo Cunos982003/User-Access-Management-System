@@ -37,10 +37,10 @@ public class AuditController {
         return ResponseEntity.ok(ApiResponse.success("Audit log queued for processing"));
     }
 
-    @GetMapping("/search")
-    @Operation(summary = "Search audit logs", description = "Search audit logs with filters")
+    @GetMapping("/logs")
+    @Operation(summary = "Get paginated audit logs", description = "Get paginated audit logs with filter and sort options")
     @SecurityRequirement(name = "Bearer Authentication")
-    public ResponseEntity<ApiResponse<Page<AuditLogResponse>>> searchAuditLogs(
+    public ResponseEntity<ApiResponse<Page<AuditLogResponse>>> getAuditLogs(
         @RequestParam(required = false) UUID userId,
         @RequestParam(required = false) String action,
         @RequestParam(required = false) String resourceType,
@@ -68,7 +68,7 @@ public class AuditController {
         return ResponseEntity.ok(ApiResponse.success(logs));
     }
 
-    @GetMapping("/export/csv")
+    @GetMapping("/logs/export")
     @Operation(summary = "Export audit logs to CSV", description = "Export all audit logs as CSV file")
     @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<byte[]> exportToCsv() throws IOException {

@@ -10,20 +10,47 @@ scrape_configs:
     static_configs:
       - targets: ['localhost:9090']
 
-  - job_name: 'auth-service'
-    metrics_path: '/api/v1/actuator/prometheus'
+  - job_name: 'api-gateway'
+    metrics_path: '/actuator/prometheus'
     scrape_interval: 10s
     static_configs:
-      - targets: ['auth-service:8080']
+      - targets: ['api-gateway:8080']
         labels:
-          application: 'auth-service'
-          environment: 'docker'
+          application: 'uam'
+          service: 'gateway'
 
-  - job_name: 'spring-actuator'
-    metrics_path: '/api/v1/actuator/prometheus'
+  - job_name: 'auth-service'
+    metrics_path: '/actuator/prometheus'
     scrape_interval: 10s
     static_configs:
-      - targets: ['auth-service:8080']
+      - targets: ['auth-service:8081']
         labels:
           application: 'uam'
           service: 'auth'
+
+  - job_name: 'user-service'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 10s
+    static_configs:
+      - targets: ['user-service:8082']
+        labels:
+          application: 'uam'
+          service: 'user'
+
+  - job_name: 'notification-service'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 10s
+    static_configs:
+      - targets: ['notification-service:8083']
+        labels:
+          application: 'uam'
+          service: 'notification'
+
+  - job_name: 'audit-service'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 10s
+    static_configs:
+      - targets: ['audit-service:8084']
+        labels:
+          application: 'uam'
+          service: 'audit'

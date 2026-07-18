@@ -4,6 +4,7 @@ import com.r2s.uam.auth.dto.response.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
@@ -102,13 +103,23 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ApiResponse<Object>> handleHttpMessageNotReadableException(
+        HttpMessageNotReadableException ex,
+        WebRequest request
+    ) {
+        log.error("Malformed request body: {}", ex.getMessage());
+        ApiResponse<Object> response = ApiResponse.error(400, "Malformed request body");
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Object>> handleGlobalException(
         Exception ex,
         WebRequest request
     ) {
         log.error("Unexpected error occurred: ", ex);
-        ApiResponse<Object> response = ApiResponse.error(500, "Internal server error: " + ex.getMessage());
+        ApiResponse<Object> response = ApiResponse.error(500, "Internal server error");
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

@@ -1,6 +1,7 @@
 package com.r2s.uam.notification.controller;
 
 import com.r2s.uam.notification.dto.ApiResponse;
+import com.r2s.uam.notification.dto.BulkEmailRequest;
 import com.r2s.uam.notification.dto.EmailLogResponse;
 import com.r2s.uam.notification.dto.SendEmailRequest;
 import com.r2s.uam.notification.service.EmailLogService;
@@ -12,7 +13,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/notifications")
@@ -33,6 +37,25 @@ public class NotificationController {
             request.getVariables()
         );
         return ResponseEntity.ok(ApiResponse.success("Email queued for sending"));
+    }
+
+    @PostMapping("/send/bulk")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Send bulk emails", description = "Admin sends bulk/forced email notifications to multiple recipients")
+    public ResponseEntity<ApiResponse<String>> sendBulkEmails(@Valid @RequestBody BulkEmailRequest request) {
+        List<EmailService.EmailEntry> entries = request.getEmails().stream()
+            .map(item -> new EmailService.EmailEntry(
+                item.getRecipient(),
+                request.getSubject(),
+                request.getTemplateName(),
+                item.getVariables()
+            ))
+            .toList();
+
+        emailService.sendBulkEmails(entries);
+
+        String msg = String.format("Bulk email queued for %d recipients", request.getEmails().size());
+        return ResponseEntity.ok(ApiResponse.success(msg));
     }
 
     @GetMapping("/logs")

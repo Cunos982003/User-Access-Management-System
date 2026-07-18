@@ -25,6 +25,7 @@
         <module>user-service</module>
         <module>notification-service</module>
         <module>audit-service</module>
+        <module>api-gateway</module>
     </modules>
 
     <properties>
@@ -39,10 +40,20 @@
         <caffeine.version>3.1.8</caffeine.version>
         <testcontainers.version>1.19.8</testcontainers.version>
         <lombok.version>1.18.32</lombok.version>
+        <spring-cloud.version>2023.0.3</spring-cloud.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <!-- Spring Cloud BOM -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
             <!-- JWT -->
             <dependency>
                 <groupId>io.jsonwebtoken</groupId>

@@ -1,0 +1,27 @@
+spring:
+  config:
+    activate:
+      on-profile: prod
+  data:
+    redis:
+          host: ${REDIS_HOST:redis}
+          port: ${REDIS_PORT:6379}
+          timeout: 2000ms
+
+
+app:
+  jwt:
+    secret: ${JWT_SECRET}
+    access-token-expiry: 900
+    issuer: uam-system
+  gateway:
+    services:
+      auth: http://auth-service:8081
+      user: http://user-service:8082
+      notification: http://notification-service:8083
+      audit: http://audit-service:8084
+
+logging:
+  level:
+    com.r2s.uam.gateway: WARN
+    org.springframework.cloud.gateway: WARN

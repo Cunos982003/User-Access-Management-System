@@ -12,6 +12,7 @@ public class EmailTemplateService {
             case "OTP" -> generateOtpTemplate(variables);
             case "WELCOME" -> generateWelcomeTemplate(variables);
             case "PASSWORD_RESET" -> generatePasswordResetTemplate(variables);
+            case "EMAIL_CHANGE" -> generateEmailChangeTemplate(variables);
             default -> generateDefaultTemplate(variables);
         };
     }
@@ -119,6 +120,45 @@ public class EmailTemplateService {
             </body>
             </html>
             """.formatted(otpCode);
+    }
+
+    private String generateEmailChangeTemplate(Map<String, String> variables) {
+        String otpCode = variables.getOrDefault("otpCode", "000000");
+        String username = variables.getOrDefault("username", "User");
+
+        return """
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <style>
+                    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+                    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+                    .warning { background: #e7f3ff; border-left: 4px solid #007bff; padding: 15px; margin: 20px 0; }
+                    .otp-box { background: #f4f4f4; padding: 20px; text-align: center; border-radius: 5px; margin: 20px 0; }
+                    .otp-code { font-size: 32px; font-weight: bold; color: #007bff; letter-spacing: 5px; }
+                    .footer { margin-top: 30px; font-size: 12px; color: #666; }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <h2>Email Change Request</h2>
+                    <p>Hello <strong>%s</strong>,</p>
+                    <p>You requested to change your email address to this email.</p>
+                    <div class="warning">
+                        <strong>Please verify:</strong> If you did not request this change, please contact support immediately.
+                    </div>
+                    <p>Use the following OTP code to confirm your email change:</p>
+                    <div class="otp-box">
+                        <div class="otp-code">%s</div>
+                    </div>
+                    <p>This code will expire in 10 minutes.</p>
+                    <div class="footer">
+                        <p>UAM System - User Access Management</p>
+                    </div>
+                </div>
+            </body>
+            </html>
+            """.formatted(username, otpCode);
     }
 
     private String generateDefaultTemplate(Map<String, String> variables) {

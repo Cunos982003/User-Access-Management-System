@@ -1,0 +1,51 @@
+spring:
+  config:
+    activate:
+      on-profile: test
+
+  datasource:
+    url: jdbc:h2:mem:testdb;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+    open-in-view: false
+
+  flyway:
+    enabled: false
+
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+      - org.springframework.boot.autoconfigure.cache.CacheAutoConfiguration
+
+  mail:
+    host: localhost
+    port: 1025
+
+app:
+  jwt:
+    secret: test-secret-key-must-be-at-least-256-bits-long-for-hs256-algorithm!!!
+    issuer: auth-service
+    access-token-expiry: 900
+    refresh-token-expiry: 604800
+  otp:
+    length: 6
+    expiry-minutes: 5
+
+audit:
+  service:
+    url: http://localhost:8082/api/v1
+
+logging:
+  level:
+    com.r2s.uam: DEBUG
+    org.springframework.security: WARN
+    org.hibernate.SQL: WARN

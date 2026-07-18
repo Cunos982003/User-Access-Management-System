@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.mail.internet.MimeMessage;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -64,6 +65,13 @@ public class EmailService {
         }
     }
 
+    @Async
+    public void sendBulkEmails(List<EmailEntry> entries) {
+        for (EmailEntry entry : entries) {
+            sendEmail(entry.getRecipient(), entry.getSubject(), entry.getTemplateName(), entry.getVariables());
+        }
+    }
+
     public void sendOtpEmail(String recipient, String otpCode, String purpose) {
         Map<String, String> variables = Map.of(
             "otpCode", otpCode,
@@ -80,5 +88,14 @@ public class EmailService {
     public void sendPasswordResetEmail(String recipient, String otpCode) {
         Map<String, String> variables = Map.of("otpCode", otpCode);
         sendEmail(recipient, "Password Reset Request", "PASSWORD_RESET", variables);
+    }
+
+    @lombok.Data
+    @lombok.AllArgsConstructor
+    public static class EmailEntry {
+        private String recipient;
+        private String subject;
+        private String templateName;
+        private Map<String, String> variables;
     }
 }

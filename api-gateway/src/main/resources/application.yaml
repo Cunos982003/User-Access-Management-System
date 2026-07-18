@@ -1,0 +1,48 @@
+spring:
+  application:
+    name: api-gateway
+  config:
+    activate:
+      on-profile: dev
+  cloud:
+    gateway:
+      httpclient:
+        connect-timeout: 2000
+        response-timeout: 10s
+
+server:
+  port: 8080
+
+app:
+  jwt:
+    secret: dev-secret-key-change-this-in-production-minimum-256-bits-for-hs256-algorithm
+    access-token-expiry: 900
+    issuer: uam-system
+  gateway:
+    services:
+      auth: http://localhost:8081
+      user: http://localhost:8082
+      notification: http://localhost:8083
+      audit: http://localhost:8084
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: always
+  health:
+    redis:
+      enabled: false
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+logging:
+  level:
+    com.r2s.uam.gateway: DEBUG
+    org.springframework.cloud.gateway: DEBUG
+    reactor.netty: INFO

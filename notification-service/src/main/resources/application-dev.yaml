@@ -57,7 +57,11 @@ management:
     mail:
       enabled: false
 
-logging:
+app:
+  jwt:
+    secret: dev-secret-key-change-this-in-production-minimum-256-bits-for-hs256-algorithm
+    access-token-expiry: 900
+    issuer: uam-system
   level:
     com.r2s.uam.notification: DEBUG
     org.springframework.web: INFO

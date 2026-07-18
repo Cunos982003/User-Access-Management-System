@@ -6,6 +6,7 @@ import com.r2s.uam.auth.entity.Role;
 import com.r2s.uam.auth.entity.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -62,13 +63,16 @@ public class JwtTokenProvider {
     }
 
     public boolean validateToken(String token) {
+        if (token == null || token.isBlank()) {
+            return false;
+        }
         try {
             Jwts.parser()
                 .verifyWith(getSigningKey())
                 .build()
                 .parseSignedClaims(token);
             return true;
-        } catch (SecurityException ex) {
+        } catch (SignatureException ex) {
             log.error("Invalid JWT signature");
         } catch (MalformedJwtException ex) {
             log.error("Invalid JWT token");
@@ -78,6 +82,10 @@ public class JwtTokenProvider {
             log.error("Unsupported JWT token");
         } catch (IllegalArgumentException ex) {
             log.error("JWT claims string is empty");
+        } catch (JwtException ex) {
+            log.error("JWT error: {}", ex.getMessage());
+        } catch (java.lang.SecurityException ex) {
+            log.error("Invalid JWT signature");
         }
         return false;
     }

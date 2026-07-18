@@ -1,0 +1,33 @@
+spring:
+  data:
+    redis:
+      host: redis
+      port: 6379
+      timeout: 2000ms
+
+  cloud:
+    gateway:
+      httpclient:
+        pool:
+          type: tcp
+          max-idle-connections: 10
+          min-idle-connections: 5
+          acquire-timeout: 4500ms
+
+app:
+  jwt:
+    secret: ${JWT_SECRET:dev-secret-key-change-this-in-production-minimum-256-bits}
+    access-token-expiry: 900
+    issuer: uam-system
+  gateway:
+    services:
+      auth: http://auth-service:8081
+      user: http://user-service:8082
+      notification: http://notification-service:8083
+      audit: http://audit-service:8084
+
+logging:
+  level:
+    com.r2s.uam.gateway: INFO
+    org.springframework.cloud.gateway: INFO
+    reactor.netty: WARN

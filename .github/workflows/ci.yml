@@ -92,13 +92,14 @@ jobs:
 
       - name: Build Docker image
         if: success()
-        run: docker build -t uam-service:${{ github.sha }} .
+        run: docker build -t uam-gateway:${{ github.sha }} -f api-gateway/Dockerfile .
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: build-artifacts
           path: |
+            api-gateway/target/*.jar
             auth-service/target/*.jar
             user-service/target/*.jar
             notification-service/target/*.jar
