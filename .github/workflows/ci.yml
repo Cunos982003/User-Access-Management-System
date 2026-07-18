@@ -58,13 +58,13 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
 
       - name: Make Maven wrapper executable
-        run: chmod +x mvnw
+        run: chmod +x mvnw || true
 
       - name: Build with Maven
-        run: ./mvnw clean install -DskipTests -B
+        run: mvn clean install -DskipTests -B
 
       - name: Run tests
-        run: ./mvnw test -B
+        run: mvn test -B
         env:
           SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/uam_test
           SPRING_DATASOURCE_USERNAME: postgres
@@ -73,7 +73,7 @@ jobs:
           SPRING_REDIS_PORT: 6379
 
       - name: Run integration tests
-        run: ./mvnw verify -B
+        run: mvn verify -B
         env:
           SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/uam_test
           SPRING_DATASOURCE_USERNAME: postgres
@@ -120,7 +120,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Run code quality checks
-        run: ./mvnw checkstyle:check -B || true
+        run: mvn checkstyle:check -B || true
 
   security-scan:
     runs-on: ubuntu-latest
